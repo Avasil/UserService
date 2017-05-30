@@ -43,6 +43,10 @@ module Controller =
         (fun f -> handleResource f (RequestErrors.CONFLICT "Resource already exists"))
   
 module UserController = 
+
+    let completeRequest result = 
+        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST result))
+
     let getAll db =
         warbler (fun _ -> db.GetAll() |> Controller.JSON)
     
@@ -54,17 +58,47 @@ module UserController =
         let addDb =
             db.Add 
             >> (Controller.handleResourceCONFLICT Controller.JSON)
-        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))
+        completeRequest addDb
     
     let update db key =
         let updateDb =
             db.Update
             >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST updateDb))
+        completeRequest updateDb
 
     let remove db =
         db.Remove 
         >> (Controller.handleResourceNOTFOUND Controller.JSON)
+
+    let updatePassword db key =
+        let updatePassword = 
+            db.UpdatePassword key
+            >> (Controller.handleResourceNOTFOUND Controller.JSON)
+        completeRequest updatePassword
+
+    let updateEmail db key =
+        let updateEmail = 
+            db.UpdateEmail key
+            >> (Controller.handleResourceNOTFOUND Controller.JSON)
+        completeRequest updateEmail
+
+    let updateStreet db key =
+        let updateStreet = 
+            db.UpdateStreet key
+            >> (Controller.handleResourceNOTFOUND Controller.JSON)
+        completeRequest updateStreet
+
+    let updateCity db key =
+        let updateCity = 
+            db.UpdateCity key
+            >> (Controller.handleResourceNOTFOUND Controller.JSON)
+        completeRequest updateCity
+
+    let updatePostCode db key =
+        let updatePostCode = 
+            db.UpdatePostCode key
+            >> (Controller.handleResourceNOTFOUND Controller.JSON)
+        completeRequest updatePostCode
 
     let userController (db:UserRepository) = 
         pathStarts "/api/users" >=> choose [
@@ -72,6 +106,11 @@ module UserController =
             GET >=> path "/api/users" >=> (getAll db)
             GET >=> pathScan "/api/users/%s" (find db)
             DELETE >=> pathScan "/api/users/%s" (remove db)
+            PUT >=> pathScan "/api/users/%s/password" (updatePassword db)
+            PUT >=> pathScan "/api/users/%s/email" (updateEmail db)
+            PUT >=> pathScan "/api/users/%s/street" (updateStreet db)
+            PUT >=> pathScan "/api/users/%s/city" (updateCity db)
+            PUT >=> pathScan "/api/users/%s/postcode" (updatePostCode db)
             PUT >=> pathScan "/api/users/%s" (update db)  
         ]
 

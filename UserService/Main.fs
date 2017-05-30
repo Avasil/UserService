@@ -1,6 +1,7 @@
 ﻿namespace Main
 
 open System
+open System.Threading
 open UserModel
 open UserRepository
 open UserRepository.UserRepositoryDb
@@ -33,5 +34,14 @@ module Main =
         }
         let result2 = mockRepositoryDb.Add user2
 
-        startWebServer defaultConfig (userController mockRepositoryDb)
+        let cts = new CancellationTokenSource()
+        let conf = { defaultConfig with cancellationToken = cts.Token }
+        let listening, server = startWebServerAsync conf (userController mockRepositoryDb)
+
+        Async.Start(server, cts.Token)
+        printfn "Make requests now"
+        Console.ReadKey true |> ignore
+
+        cts.Cancel()
+
         0

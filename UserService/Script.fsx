@@ -4,3 +4,4 @@
 
 // Define your library scripting code here
 
+// da rade po prostu ze skryptu uruchomic i miec w konsoli?
