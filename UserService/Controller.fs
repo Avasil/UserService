@@ -76,6 +76,10 @@ module UserController =
             >> (Controller.handleResourceNOTFOUND Controller.JSON)
         completeRequest updatePassword
 
+    let getPassword db =
+        db.GetPassword
+        >> (Controller.handleResourceNOTFOUND Controller.JSON)
+
     let updateEmail db key =
         let updateEmail = 
             db.UpdateEmail key
@@ -102,15 +106,16 @@ module UserController =
 
     let userController (db:UserRepository) = 
         pathStarts "/api/users" >=> choose [
-            POST >=> path "/api/users" >=> (add db)
-            GET >=> path "/api/users" >=> (getAll db)
-            GET >=> pathScan "/api/users/%s" (find db)
             DELETE >=> pathScan "/api/users/%s" (remove db)
             PUT >=> pathScan "/api/users/%s/password" (updatePassword db)
+            GET >=> pathScan "/api/users/%s/password" (getPassword db)
             PUT >=> pathScan "/api/users/%s/email" (updateEmail db)
             PUT >=> pathScan "/api/users/%s/street" (updateStreet db)
             PUT >=> pathScan "/api/users/%s/city" (updateCity db)
             PUT >=> pathScan "/api/users/%s/postcode" (updatePostCode db)
             PUT >=> pathScan "/api/users/%s" (update db)  
+            POST >=> path "/api/users" >=> (add db)
+            GET >=> path "/api/users" >=> (getAll db)
+            GET >=> pathScan "/api/users/%s" (find db)
         ]
 

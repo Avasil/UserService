@@ -49,6 +49,13 @@ module MockRepository =
                 None
         find userId |> Option.bind tryupdate
 
+    let getPassword userId = 
+        let (success, value) = users.TryGetValue(userId)
+        if success then
+            Some(value.Password)
+        else 
+            None
+
     let updateEmail userId email  = 
         let tryupdate current =
             let newUser = {current with Email = email}
@@ -92,6 +99,7 @@ module MockRepository =
         Remove = remove
         Update = update
         UpdatePassword = updatePassword
+        GetPassword = getPassword
         UpdateEmail = updateEmail
         UpdateStreet = updateStreet
         UpdateCity = updateCity
