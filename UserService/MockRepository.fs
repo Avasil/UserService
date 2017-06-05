@@ -40,15 +40,6 @@ module MockRepository =
                 None
         find user.Username |> Option.bind tryupdate
 
-    let updatePassword userId password  = 
-        let tryupdate current =
-            let newUser = {current with Password = password}
-            if users.TryUpdate(userId, newUser, current) then
-                Some(newUser)
-            else 
-                None
-        find userId |> Option.bind tryupdate
-
     let getPassword userId = 
         let (success, value) = users.TryGetValue(userId)
         if success then
@@ -56,52 +47,11 @@ module MockRepository =
         else 
             None
 
-    let updateEmail userId email  = 
-        let tryupdate current =
-            let newUser = {current with Email = email}
-            if users.TryUpdate(userId, newUser, current) then
-                Some(newUser)
-            else 
-                None
-        find userId |> Option.bind tryupdate
-
-    let updateStreet userId street = 
-        let tryupdate current =
-            let newUser = {current with Street = street}
-            if users.TryUpdate(userId, newUser, current) then
-                Some(newUser)
-            else 
-                None
-        find userId |> Option.bind tryupdate
-
-    let updateCity userId city = 
-        let tryupdate current =
-            let newUser = {current with City = city}
-            if users.TryUpdate(userId, newUser, current) then
-                Some(newUser)
-            else 
-                None
-        find userId |> Option.bind tryupdate
-
-    let updatePostCode userId postCode = 
-        let tryupdate current =
-            let newUser = {current with PostCode = postCode}
-            if users.TryUpdate(userId, newUser, current) then
-                Some(newUser)
-            else 
-                None
-        find userId |> Option.bind tryupdate
-
     let mockRepositoryDb = {
         Add = add
         GetAll = getAll
         Find = find
         Remove = remove
         Update = update
-        UpdatePassword = updatePassword
         GetPassword = getPassword
-        UpdateEmail = updateEmail
-        UpdateStreet = updateStreet
-        UpdateCity = updateCity
-        UpdatePostCode = updatePostCode
     }

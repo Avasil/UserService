@@ -11,13 +11,7 @@ type UserRepository = {
     Find : string -> Option<User>
     Remove : string -> Option<User>
     Update : User -> Option<User>
-    UpdatePassword : string -> string -> Option<User>
     GetPassword : string -> Option<string>
-    UpdateEmail : string -> string -> Option<User>
-    UpdateStreet : string -> string -> Option<User>
-    UpdateCity : string -> string -> Option<User>
-    UpdatePostCode : string -> string -> Option<User>
-
 }
 
 module UserRepositoryDb = 
@@ -42,17 +36,7 @@ module UserRepositoryDb =
     
     let update user = None
 
-    let updatePassword userId password  = None
-
     let getPassword userId = None
-
-    let updateEmail userId email = None
-
-    let updateStreet userId street = None
-
-    let updateCity userId city = None
-
-    let updatePostCode userId postCode = None
 
     let userRepositoryDb = {
         Add = add
@@ -60,10 +44,5 @@ module UserRepositoryDb =
         Find = find
         Remove = remove
         Update = update
-        UpdatePassword = updatePassword
         GetPassword = getPassword
-        UpdateEmail = updateEmail
-        UpdateStreet = updateStreet
-        UpdateCity = updateCity
-        UpdatePostCode = updatePostCode
     }

@@ -9,6 +9,7 @@ open Controller
 open Controller.UserController
 open Suave
 open MockRepository.MockRepository
+open MongoRepository.MongoRepository
 
 module Main = 
     [<EntryPoint>]
@@ -22,7 +23,7 @@ module Main =
             PostCode = "12-345"
         }
 
-        let result = mockRepositoryDb.Add user
+        let result = mongoRepositoryDb.Add user
 
         let user2 = {
             Username = "Konrad"
@@ -32,11 +33,11 @@ module Main =
             City = "Konradowo"
             PostCode = "12-345"
         }
-        let result2 = mockRepositoryDb.Add user2
+        let result2 = mongoRepositoryDb.Add user2
 
         let cts = new CancellationTokenSource()
         let conf = { defaultConfig with cancellationToken = cts.Token }
-        let listening, server = startWebServerAsync conf (userController mockRepositoryDb)
+        let listening, server = startWebServerAsync conf (userController mongoRepositoryDb)
 
         Async.Start(server, cts.Token)
         printfn "Make requests now"

@@ -70,49 +70,14 @@ module UserController =
         db.Remove 
         >> (Controller.handleResourceNOTFOUND Controller.JSON)
 
-    let updatePassword db key =
-        let updatePassword = 
-            db.UpdatePassword key
-            >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        completeRequest updatePassword
-
     let getPassword db =
         db.GetPassword
         >> (Controller.handleResourceNOTFOUND Controller.JSON)
 
-    let updateEmail db key =
-        let updateEmail = 
-            db.UpdateEmail key
-            >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        completeRequest updateEmail
-
-    let updateStreet db key =
-        let updateStreet = 
-            db.UpdateStreet key
-            >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        completeRequest updateStreet
-
-    let updateCity db key =
-        let updateCity = 
-            db.UpdateCity key
-            >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        completeRequest updateCity
-
-    let updatePostCode db key =
-        let updatePostCode = 
-            db.UpdatePostCode key
-            >> (Controller.handleResourceNOTFOUND Controller.JSON)
-        completeRequest updatePostCode
-
     let userController (db:UserRepository) = 
         pathStarts "/api/users" >=> choose [
             DELETE >=> pathScan "/api/users/%s" (remove db)
-            PUT >=> pathScan "/api/users/%s/password" (updatePassword db)
             GET >=> pathScan "/api/users/%s/password" (getPassword db)
-            PUT >=> pathScan "/api/users/%s/email" (updateEmail db)
-            PUT >=> pathScan "/api/users/%s/street" (updateStreet db)
-            PUT >=> pathScan "/api/users/%s/city" (updateCity db)
-            PUT >=> pathScan "/api/users/%s/postcode" (updatePostCode db)
             PUT >=> pathScan "/api/users/%s" (update db)  
             POST >=> path "/api/users" >=> (add db)
             GET >=> path "/api/users" >=> (getAll db)
